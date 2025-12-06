@@ -11,6 +11,22 @@ namespace Core.Managers.Files
         private const string BinaryFileExtension = ".bin";
         private const string JsonFileExtension = ".json";
 
+        public static bool IsFileExist(string fileName, string folderName = null, FileType fileType = FileType.Default)
+        {
+            var folderPath = GetFolderPath(folderName);
+            ValidateDirectoryExistence(folderPath);
+
+            if (Directory.Exists(folderPath))
+            {
+                var extension = fileType == FileType.Binary ? BinaryFileExtension : JsonFileExtension;
+                var fullPath = GetFullPath(folderPath, fileName) + extension;
+
+                return File.Exists(fullPath);
+            }
+
+            return false;
+        }
+
         public static void WriteBytes(this byte[] bytes, string name, string folderName = null)
         {
             var folderPath = GetFolderPath(folderName);
