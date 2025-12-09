@@ -9,11 +9,13 @@ namespace Core.MVC
     public class GameObjectMVCFactory : IGameObjectMVCFactory
     {
         private readonly DiContainer _container;
+        private readonly TickableManager _tickableManager;
         private readonly IPrefabsPathProvider _prefabsPathProvider;
 
-        public GameObjectMVCFactory(DiContainer container, IPrefabsPathProvider prefabsPathProvider)
+        public GameObjectMVCFactory(DiContainer container, TickableManager tickableManager, IPrefabsPathProvider prefabsPathProvider)
         {
             _container = container;
+            _tickableManager = tickableManager;
             _prefabsPathProvider = prefabsPathProvider;
         }
 
@@ -96,6 +98,8 @@ namespace Core.MVC
                 controller = _container.Resolve<TController>();
             }
 
+            TryRegisterTickable(controller);
+
             return controller;
         }
 
@@ -104,6 +108,24 @@ namespace Core.MVC
             if (controller is IInitializable initializable)
             {
                 initializable.Initialize();
+            }
+        }
+
+        private void TryRegisterTickable<TController>(TController controller)
+        {
+            if (controller is ITickable tickable)
+            {
+                _tickableManager.Add(tickable);
+            }
+
+            if (controller is IFixedTickable fixedTickable)
+            {
+                _tickableManager.AddFixed(fixedTickable);
+            }
+
+            if (controller is ILateTickable lateTickable)
+            {
+                _tickableManager.AddLate(lateTickable);
             }
         }
 
