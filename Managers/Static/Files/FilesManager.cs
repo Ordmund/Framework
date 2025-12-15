@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Core.Dependencies;
 using UnityEngine;
@@ -11,15 +12,15 @@ namespace Core.Managers.Files
         private const string BinaryFileExtension = ".bin";
         private const string JsonFileExtension = ".json";
 
-        public static bool IsFileExist(string fileName, string folderName = null, FileType fileType = FileType.Default)
+        public static bool IsFileExist(string fileName, string directoryName = null, FileType fileType = FileType.Default)
         {
-            var folderPath = GetFolderPath(folderName);
-            ValidateDirectoryExistence(folderPath);
+            var directoryPath = GetDirectoryPath(directoryName);
+            ValidateDirectoryExistence(directoryPath);
 
-            if (Directory.Exists(folderPath))
+            if (Directory.Exists(directoryPath))
             {
                 var extension = fileType == FileType.Binary ? BinaryFileExtension : JsonFileExtension;
-                var fullPath = GetFullPath(folderPath, fileName) + extension;
+                var fullPath = GetFullPath(directoryPath, fileName) + extension;
 
                 return File.Exists(fullPath);
             }
@@ -27,25 +28,25 @@ namespace Core.Managers.Files
             return false;
         }
 
-        public static void WriteBytes(this byte[] bytes, string name, string folderName = null)
+        public static void WriteBytes(this byte[] bytes, string name, string directoryName = null)
         {
-            var folderPath = GetFolderPath(folderName);
-            ValidateDirectoryExistence(folderPath);
+            var directoryPath = GetDirectoryPath(directoryName);
+            ValidateDirectoryExistence(directoryPath);
 
-            var path = GetFullPath(folderPath, name);
+            var path = GetFullPath(directoryPath, name);
 
             File.WriteAllBytes(path + BinaryFileExtension, bytes);
         }
 
-        public static void Write<T>(this T data, string name = null, string folderName = null, FileType fileType = FileType.Default)
+        public static void Write<T>(this T data, string name = null, string directoryName = null, FileType fileType = FileType.Default)
         {
             var type = data.GetType();
             ValidateSerializability(type);
 
-            var folderPath = GetFolderPath(folderName);
-            ValidateDirectoryExistence(folderPath);
+            var directoryPath = GetDirectoryPath(directoryName);
+            ValidateDirectoryExistence(directoryPath);
 
-            var path = GetFullPath(folderPath, name ?? type.Name);
+            var path = GetFullPath(directoryPath, name ?? type.Name);
             var json = JsonUtility.ToJson(data);
             var encryptedJson = json.Encrypt();
 
@@ -64,24 +65,24 @@ namespace Core.Managers.Files
             }
         }
 
-        public static byte[] ReadBytes(string name, string folderName = null)
+        public static byte[] ReadBytes(string name, string directoryName = null)
         {
-            var folderPath = GetFolderPath(folderName);
-            ValidateDirectoryExistence(folderPath);
+            var directoryPath = GetDirectoryPath(directoryName);
+            ValidateDirectoryExistence(directoryPath);
 
-            var path = GetFullPath(folderPath, name) + BinaryFileExtension;
+            var path = GetFullPath(directoryPath, name) + BinaryFileExtension;
 
             return File.Exists(path)
                 ? File.ReadAllBytes(path)
                 : throw new FileNotFoundException($"File {path} not found!");
         }
 
-        public static T Read<T>(string name = null, string folderName = null, FileType fileType = FileType.Default)
+        public static T Read<T>(string name = null, string directoryName = null, FileType fileType = FileType.Default)
         {
-            var folderPath = GetFolderPath(folderName);
-            ValidateDirectoryExistence(folderPath);
+            var directoryPath = GetDirectoryPath(directoryName);
+            ValidateDirectoryExistence(directoryPath);
 
-            var path = GetFullPath(folderPath, name ?? typeof(T).Name);
+            var path = GetFullPath(directoryPath, name ?? typeof(T).Name);
 
             var encryptedJson = string.Empty;
             switch (fileType)
@@ -110,6 +111,18 @@ namespace Core.Managers.Files
             return JsonUtility.FromJson<T>(json);
         }
 
+        public static string[] GetDirectoriesNames(string directoryName = null)
+        {
+            var directoryPath = GetDirectoryPath(directoryName);
+            if (Directory.Exists(directoryPath))
+            {
+                var directoriesPaths = Directory.GetDirectories(directoryPath);
+                return directoriesPaths.Select(Path.GetFileName).ToArray();
+            }
+
+            return Array.Empty<string>();
+        }
+
         private static void ValidateSerializability(Type type)
         {
             if (type.IsPrimitive || type.IsArray || type == typeof(string) || (!type.IsClass && !type.IsValueType) || !type.IsSerializable)
@@ -131,19 +144,19 @@ namespace Core.Managers.Files
             return fullPath;
         }
 
-        private static string GetFolderPath(string folderName = null)
+        private static string GetDirectoryPath(string directoryName = null)
         {
-            var filesPath = GetPathToFilesFolder();
-            var fullPath = string.IsNullOrEmpty(folderName) ? filesPath : Path.Combine(filesPath, folderName);
+            var filesPath = GetPathToFilesDirectory();
+            var fullPath = string.IsNullOrEmpty(directoryName) ? filesPath : Path.Combine(filesPath, directoryName);
 
             return fullPath;
         }
 
-        private static string GetPathToFilesFolder()
+        private static string GetPathToFilesDirectory()
         {
-            return string.IsNullOrEmpty(DependenciesProvider.PathToFilesFolder)
-                ? throw new PathNotFoundException("Path to save files folder not found!")
-                : DependenciesProvider.PathToFilesFolder;
+            return string.IsNullOrEmpty(DependenciesProvider.PathToFilesDirectory)
+                ? throw new PathNotFoundException("Path to save files directory not found!")
+                : DependenciesProvider.PathToFilesDirectory;
         }
     }
 }
