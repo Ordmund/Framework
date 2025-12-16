@@ -1,11 +1,11 @@
-#if UNITY_EDITOR
 using System;
 using System.IO;
 using System.Linq;
+using Core.Managers.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
-namespace Core.Managers.ScriptableObjects
+namespace Core.Editor
 {
     public class ScriptableObjectsCreator : EditorWindow
     {
@@ -79,4 +79,3 @@ namespace Core.Managers.ScriptableObjects
         }
     }
 }
-#endif
