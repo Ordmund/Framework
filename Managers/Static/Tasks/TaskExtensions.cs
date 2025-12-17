@@ -34,7 +34,7 @@ namespace Core.Managers
             {
                 asyncTask.InvokeOnFaulted();
 
-                Debug.LogError($"{asyncTask.GetType().Name} is failed with the exception: {error.Message}");
+                Debug.LogError(error);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Core.Managers
             {
                 asyncTask.InvokeOnFaulted();
 
-                Debug.LogError($"{asyncTask.GetType().Name} is failed with the exception: {error.Message}");
+                Debug.LogError(error);
             }
         }
     }
