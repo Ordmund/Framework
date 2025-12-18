@@ -9,7 +9,7 @@ namespace Core.Controllers
         public virtual void Initialize()
         {
         }
-        
+
         public virtual void Dispose()
         {
         }
