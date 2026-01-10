@@ -33,7 +33,12 @@ namespace Core.Editor
         {
             _targetFolder = (DefaultAsset) EditorGUILayout.ObjectField("Select Folder", _targetFolder, typeof(DefaultAsset), false);
             _scriptableObjectName = EditorGUILayout.TextField("Name: ", _scriptableObjectName);
-            _selectedIndex = EditorGUILayout.Popup("ScriptableObject", _selectedIndex, _scriptableObjects.Select(type => type.Name).ToArray());
+            var newIndex = EditorGUILayout.Popup("ScriptableObject", _selectedIndex, _scriptableObjects.Select(type => type.Name).ToArray());
+            if (newIndex != _selectedIndex)
+            {
+                _scriptableObjectName = _scriptableObjects[newIndex].Name;
+                _selectedIndex = newIndex;
+            }
 
             if (GUILayout.Button("Create"))
             {
