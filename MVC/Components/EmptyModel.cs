@@ -1,6 +1,6 @@
 namespace Core.MVC
 {
-    public class EmptyModel : BaseModel
-    {
-    }
+	public class EmptyModel : BaseModel
+	{
+	}
 }
