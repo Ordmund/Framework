@@ -3,100 +3,100 @@ using System.Threading.Tasks;
 
 namespace Core.Tasks
 {
-    public abstract class AsyncTask
-    {
-        private event Action OnCompleted;
-        private event Action OnCanceled;
-        private event Action OnFaulted;
-        
-        public abstract Task Execute();
+	public abstract class AsyncTask
+	{
+		private event Action OnCompleted;
+		private event Action OnCanceled;
+		private event Action OnFaulted;
 
-        public AsyncTask OnComplete(Action action)
-        {
-            OnCompleted += action;
+		public abstract Task Execute();
 
-            return this;
-        }
-        
-        public AsyncTask OnCancel(Action action)
-        {
-            OnCanceled += action;
+		public AsyncTask OnComplete(Action action)
+		{
+			OnCompleted += action;
 
-            return this;
-        }
-        
-        public AsyncTask OnFault(Action action)
-        {
-            OnFaulted += action;
+			return this;
+		}
 
-            return this;
-        }
+		public AsyncTask OnCancel(Action action)
+		{
+			OnCanceled += action;
 
-        public void InvokeOnCompleted()
-        {
-            OnCompleted?.Invoke();
-        }
-        
-        public void InvokeOnCanceled()
-        {
-            OnCanceled?.Invoke();
-        }
-        
-        public void InvokeOnFaulted()
-        {
-            OnFaulted?.Invoke();
-        }
-    }
-    
-    public abstract class AsyncTask<T>
-    {
-        public T Result { get; private set; }
+			return this;
+		}
 
-        private event Action<T> OnCompleted;
-        private event Action OnCanceled;
-        private event Action OnFaulted;
-        
-        public abstract Task<T> Execute();
+		public AsyncTask OnFault(Action action)
+		{
+			OnFaulted += action;
 
-        public void SaveResult(T result)
-        {
-            Result =  result;
-        }
+			return this;
+		}
 
-        public AsyncTask<T> OnComplete(Action<T> action)
-        {
-            OnCompleted += action;
+		public void InvokeOnCompleted()
+		{
+			OnCompleted?.Invoke();
+		}
 
-            return this;
-        }
-        
-        public AsyncTask<T> OnCancel(Action action)
-        {
-            OnCanceled += action;
+		public void InvokeOnCanceled()
+		{
+			OnCanceled?.Invoke();
+		}
 
-            return this;
-        }
-        
-        public AsyncTask<T> OnFault(Action action)
-        {
-            OnFaulted += action;
+		public void InvokeOnFaulted()
+		{
+			OnFaulted?.Invoke();
+		}
+	}
 
-            return this;
-        }
+	public abstract class AsyncTask<T>
+	{
+		public T Result { get; private set; }
 
-        public void InvokeOnCompleted()
-        {
-            OnCompleted?.Invoke(Result);
-        }
-        
-        public void InvokeOnCanceled()
-        {
-            OnCanceled?.Invoke();
-        }
-        
-        public void InvokeOnFaulted()
-        {
-            OnFaulted?.Invoke();
-        }
-    }
+		private event Action<T> OnCompleted;
+		private event Action OnCanceled;
+		private event Action OnFaulted;
+
+		public abstract Task<T> Execute();
+
+		public void SaveResult(T result)
+		{
+			Result = result;
+		}
+
+		public AsyncTask<T> OnComplete(Action<T> action)
+		{
+			OnCompleted += action;
+
+			return this;
+		}
+
+		public AsyncTask<T> OnCancel(Action action)
+		{
+			OnCanceled += action;
+
+			return this;
+		}
+
+		public AsyncTask<T> OnFault(Action action)
+		{
+			OnFaulted += action;
+
+			return this;
+		}
+
+		public void InvokeOnCompleted()
+		{
+			OnCompleted?.Invoke(Result);
+		}
+
+		public void InvokeOnCanceled()
+		{
+			OnCanceled?.Invoke();
+		}
+
+		public void InvokeOnFaulted()
+		{
+			OnFaulted?.Invoke();
+		}
+	}
 }
