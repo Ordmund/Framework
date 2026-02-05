@@ -1,7 +1,14 @@
 namespace Core.Managers.Definitions
 {
-	public interface IDefinitionRegistry <TDefinition> where TDefinition : Definition
+	public interface IDefinitionRegistry<TDefinition> where TDefinition : Definition
 	{
+		/// <summary>
+		/// Retrieves the name of a definition by its identifier. Returns a fallback string if no matching definition is found.
+		/// </summary>
+		/// <param name="id">The unique identifier of the definition.</param>
+		/// <returns>The name of the matching definition, or a fallback string.</returns>
+		string GetName(string id);
+
 		/// <summary>
 		/// Retrieves a definition by its identifier. Returns a fallback definition if no matching definition exists.
 		/// </summary>
@@ -15,8 +22,8 @@ namespace Core.Managers.Definitions
 		/// <param name="id">The unique identifier of the definition.</param>
 		/// <typeparam name="TConcrete">The expected concrete definition type.</typeparam>
 		/// <returns>The matching definition of the specified type, or the fallback definition.</returns>
-		/// <exception cref="Exceptions.InvalidCastException">Thrown if a definition with the specified identifier exists but is not of the requested type.</exception>
-		/// <exception cref="Exceptions.DefinitionNotFoundException">Thrown if no definition with the specified identifier exists.</exception>
+		/// <exception cref="InvalidCastException">Thrown if a definition with the specified identifier exists but is not of the requested type.</exception>
+		/// <exception cref="DefinitionNotFoundException">Thrown if no definition with the specified identifier exists.</exception>
 		TConcrete Get<TConcrete>(string id) where TConcrete : TDefinition;
 
 		/// <summary>

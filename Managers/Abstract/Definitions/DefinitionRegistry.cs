@@ -27,6 +27,11 @@ namespace Core.Managers.Definitions
 			}
 		}
 
+		public string GetName(string id)
+		{
+			return Get(id).Name;
+		}
+
 		public TDefinition Get(string id)
 		{
 			if (_definitions.TryGetValue(id, out var itemDefinition))
