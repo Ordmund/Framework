@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Abstract
+namespace Core.Managers.Definitions
 {
 	public class Definition : ScriptableObject
 	{

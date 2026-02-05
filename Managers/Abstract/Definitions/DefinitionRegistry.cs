@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using Core.Abstract.Exceptions;
 using Core.Managers.ScriptableObjects;
 using UnityEngine;
 using Zenject;
 
-namespace Core.Abstract
+namespace Core.Managers.Definitions
 {
-	public abstract class DefinitionRegistry<TDefinition> : IInitializable where TDefinition : Definition
+	public abstract class DefinitionRegistry<TDefinition> : IDefinitionRegistry<TDefinition>, IInitializable where TDefinition : Definition
 	{
 		private readonly Dictionary<string, TDefinition> _definitions = new();
 

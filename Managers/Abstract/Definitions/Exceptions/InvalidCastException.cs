@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Abstract.Exceptions
+namespace Core.Managers.Definitions
 {
 	public class InvalidCastException : Exception
 	{
