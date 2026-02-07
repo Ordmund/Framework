@@ -14,19 +14,21 @@ namespace Core.Editor
 		private string _scriptableObjectName;
 		private int _selectedIndex;
 
+		protected virtual Type AssemblyTargetType => typeof(ScriptableObjectsPathHandler);
+
 		[MenuItem("Window/ScriptableObjects/Core Assembly Creator")]
 		private static void OpenWindow()
 		{
 			var window = GetWindow<ScriptableObjectsCreator>();
 			if (window)
-				window.GetScriptableObjects();
+				window.Initialize();
 		}
 
-		private void GetScriptableObjects()
+		protected void Initialize()
 		{
-			var currentAssembly = typeof(ScriptableObjectsPathHandler).Assembly;
+			var currentAssembly = AssemblyTargetType.Assembly;
 			var scriptableObjectType = typeof(ScriptableObject);
-			_scriptableObjects = currentAssembly.GetTypes().Where(classType => scriptableObjectType.IsAssignableFrom(classType)).ToArray();
+			_scriptableObjects = currentAssembly.GetTypes().Where(classType => scriptableObjectType.IsAssignableFrom(classType) && !classType.IsAbstract).ToArray();
 		}
 
 		private void OnGUI()
