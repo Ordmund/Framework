@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using Core.Managers.Definitions;
 using Core.Managers.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +16,8 @@ namespace Core.Editor
 		private string _scriptableObjectName;
 		private int _selectedIndex;
 
-		protected virtual Type AssemblyTargetType => typeof(ScriptableObjectsPathHandler);
+		protected virtual Assembly TargetAssembly => typeof(ScriptableObjectsPathHandler).Assembly;
+		protected virtual Type[] IgnoredTypes => new[] { typeof(Definition) };
 
 		[MenuItem("Window/ScriptableObjects/Core Assembly Creator")]
 		private static void OpenWindow()
@@ -26,9 +29,14 @@ namespace Core.Editor
 
 		protected void Initialize()
 		{
-			var currentAssembly = AssemblyTargetType.Assembly;
-			var scriptableObjectType = typeof(ScriptableObject);
-			_scriptableObjects = currentAssembly.GetTypes().Where(classType => scriptableObjectType.IsAssignableFrom(classType) && !classType.IsAbstract).ToArray();
+			_scriptableObjects = TargetAssembly.GetTypes().Where(IsDisplayableScriptableObjectType).ToArray();
+		}
+
+		private bool IsDisplayableScriptableObjectType(Type classType)
+		{
+			return typeof(ScriptableObject).IsAssignableFrom(classType) &&
+			       !classType.IsAbstract &&
+			       !IgnoredTypes.Any(ignoredType => ignoredType.IsAssignableFrom(classType));
 		}
 
 		private void OnGUI()
