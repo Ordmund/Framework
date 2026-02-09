@@ -181,6 +181,10 @@ namespace Core.Editor
 
 			switch (property.propertyType)
 			{
+				case SerializedPropertyType.Boolean:
+					property.boolValue = (bool)value;
+					break;
+
 				case SerializedPropertyType.String:
 					property.stringValue = (string)value;
 					break;
