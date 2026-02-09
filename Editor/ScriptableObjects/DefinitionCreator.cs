@@ -11,20 +11,20 @@ namespace Core.Editor
 {
 	public abstract class DefinitionCreator<TDefinition, TDefinitionLibrary> : EditorWindow where TDefinition : Definition where TDefinitionLibrary : DefinitionLibrary<TDefinition>
 	{
-		private DefaultAsset _targetFolder;
-		private string _definitionName;
 		private string[] _definitionsTypesNames;
 		private int _typeIndex;
+		private bool _defaultFolderFound;
 
 		private string _labelMessage;
 		private GUIStyle _labelStyle;
 
-		private bool _defaultFolderFound;
-		private bool _initializationError;
-
-		private const string ErrorPlaceholder = "Error";
 		private const string NameRegexExpression = "(?<=[a-z])(?=[A-Z0-9])|(?<=[A-Z0-9])(?=[A-Z][a-z])";
+		protected const string ErrorPlaceholder = "Error";
 
+		protected string DefinitionName;
+		protected bool InitializationError;
+		protected DefaultAsset TargetFolder;
+		
 		protected abstract string DefaultFolderPath { get; }
 
 		private void OnEnable()
@@ -47,7 +47,7 @@ namespace Core.Editor
 			if (defaultFolder != null)
 			{
 				_defaultFolderFound = true;
-				_targetFolder = defaultFolder;
+				TargetFolder = defaultFolder;
 			}
 			else
 			{
@@ -68,7 +68,7 @@ namespace Core.Editor
 			}
 			else
 			{
-				_initializationError = true;
+				InitializationError = true;
 				targetArray = new[] { ErrorPlaceholder };
 				SetLabel($"No concrete {typeof(T).Name} classes found!", Color.softRed);
 			}
@@ -86,27 +86,27 @@ namespace Core.Editor
 
 		protected virtual void DrawConfigurationFields()
 		{
-			_definitionName = EditorGUILayout.TextField("Name: ", _definitionName);
+			DefinitionName = EditorGUILayout.TextField("Name: ", DefinitionName);
 			_typeIndex = EditorGUILayout.Popup("Type:", _typeIndex, _definitionsTypesNames);
 		}
 
 		private void DrawTargetFolder()
 		{
 			EditorGUI.BeginDisabledGroup(_defaultFolderFound);
-			_targetFolder = (DefaultAsset)EditorGUILayout.ObjectField("Target Folder", _targetFolder, typeof(DefaultAsset), false);
+			TargetFolder = (DefaultAsset)EditorGUILayout.ObjectField("Target Folder", TargetFolder, typeof(DefaultAsset), false);
 			EditorGUI.EndDisabledGroup();
 		}
 
 		private void DrawCreateButton()
 		{
-			var createIsNotAllowed = string.IsNullOrEmpty(_definitionName) || _targetFolder == null || _initializationError;
+			var createIsNotAllowed = string.IsNullOrEmpty(DefinitionName) || TargetFolder == null || InitializationError;
 			EditorGUI.BeginDisabledGroup(createIsNotAllowed);
 			if (GUILayout.Button("Create"))
 			{
 				var fullPath = GetTargetFullPath();
 				if (File.Exists(fullPath))
 				{
-					SetLabel($"Definition {_definitionName} already exists!", Color.softRed);
+					SetLabel($"Definition {DefinitionName} already exists!", Color.softRed);
 				}
 				else
 				{
@@ -115,7 +115,7 @@ namespace Core.Editor
 					FillDefaultDefinitionFields(definition);
 					UpdateDefinitionLibrary();
 
-					SetLabel($"{_definitionName} successfully created!", Color.mediumSeaGreen);
+					SetLabel($"{DefinitionName} successfully created!", Color.mediumSeaGreen);
 				}
 			}
 
@@ -130,7 +130,7 @@ namespace Core.Editor
 			}
 		}
 
-		private void SetLabel(string message, Color color)
+		protected void SetLabel(string message, Color color)
 		{
 			_labelMessage = message;
 			_labelStyle = new GUIStyle(EditorStyles.boldLabel)
@@ -162,9 +162,9 @@ namespace Core.Editor
 			var serializedObject = new SerializedObject(definition);
 			serializedObject.Update();
 
-			SetSerializeFieldValue(serializedObject, DefinitionFieldNames.IdFieldName, _definitionName);
+			SetSerializeFieldValue(serializedObject, DefinitionFieldNames.IdFieldName, DefinitionName);
 
-			var displayName = Regex.Replace(_definitionName, NameRegexExpression, " ");
+			var displayName = Regex.Replace(DefinitionName, NameRegexExpression, " ");
 			SetSerializeFieldValue(serializedObject, DefinitionFieldNames.NameFieldName, displayName);
 
 			serializedObject.ApplyModifiedProperties();
@@ -202,9 +202,9 @@ namespace Core.Editor
 			definitionLibrary.ScanForDefinitions();
 		}
 
-		private string GetTargetFullPath()
+		protected virtual string GetTargetFullPath()
 		{
-			return Path.Combine(AssetDatabase.GetAssetPath(_targetFolder), _definitionName + ".asset");
+			return Path.Combine(AssetDatabase.GetAssetPath(TargetFolder), DefinitionName + ".asset");
 		}
 	}
 }
