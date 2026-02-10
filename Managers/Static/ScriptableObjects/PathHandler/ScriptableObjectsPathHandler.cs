@@ -38,7 +38,7 @@ namespace Core.Managers.ScriptableObjects
 			var filteredGuids = guids.Where(guid =>
 			{
 				var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-				return _ignoredSubfoldersPaths.All(ignoredPath => !path.StartsWith(ignoredPath));
+				return _ignoredSubfoldersPaths.All(ignoredPath => !path.StartsWith(ignoredPath + '/'));
 			}).ToArray();
 
 			_paths = new ScriptableObjectPath[filteredGuids.Length];
