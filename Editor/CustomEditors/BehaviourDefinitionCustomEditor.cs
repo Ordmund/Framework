@@ -47,25 +47,16 @@ namespace Core.Editor.CustomEditors
 			}
 		}
 
-		protected override void DrawSerializeFields()
+		protected override void DrawBaseFields()
 		{
-			serializedObject.Update();
-
-			DrawLabel("Serialize Fields:", GetUpdatedBlockHeaderStyle);
-			EditorGUILayout.BeginVertical("Box");
-			EditorGUILayout.PropertyField(IdProperty);
-			EditorGUILayout.PropertyField(NameProperty);
-
+			base.DrawBaseFields();
+			
 			var newIndex = EditorGUILayout.Popup("Behaviour Id:", _behaviourIdIndex, _behavioursIdsNames);
 			if (newIndex != _behaviourIdIndex)
 			{
 				_behaviourIdProperty.stringValue = _behavioursIdsNames[newIndex];
 				_behaviourIdIndex = newIndex;
 			}
-
-			EditorGUILayout.EndVertical();
-
-			serializedObject.ApplyModifiedProperties();
 		}
 	}
 }

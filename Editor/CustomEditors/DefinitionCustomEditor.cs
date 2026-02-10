@@ -96,12 +96,18 @@ namespace Core.Editor.CustomEditors
 			serializedObject.Update();
 
 			DrawLabel("Serialize Fields:", GetUpdatedBlockHeaderStyle);
+
 			EditorGUILayout.BeginVertical("Box");
-			EditorGUILayout.PropertyField(IdProperty);
-			EditorGUILayout.PropertyField(NameProperty);
+			DrawBaseFields();
 			EditorGUILayout.EndVertical();
 
 			serializedObject.ApplyModifiedProperties();
+		}
+
+		protected virtual void DrawBaseFields()
+		{
+			EditorGUILayout.PropertyField(IdProperty);
+			EditorGUILayout.PropertyField(NameProperty);
 		}
 
 		private void DrawLibraryStatusLabel()
