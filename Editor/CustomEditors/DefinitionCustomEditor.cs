@@ -9,9 +9,8 @@ namespace Core.Editor.CustomEditors
 {
 	public abstract class DefinitionCustomEditor<TDefinition, TDefinitionLibrary> : UnityEditor.Editor where TDefinition : Definition where TDefinitionLibrary : DefinitionLibrary<TDefinition>
 	{
-		protected bool UseDefaultInspector;
-		protected SerializedProperty IdProperty;
-		protected SerializedProperty NameProperty;
+		private SerializedProperty _idProperty;
+		private SerializedProperty _nameProperty;
 
 		private TDefinitionLibrary _definitionLibrary;
 
@@ -19,6 +18,10 @@ namespace Core.Editor.CustomEditors
 		private GUIStyle _blockHeaderStyle;
 		private GUIStyle _libraryStatusStyle;
 		private bool _definitionIsInLibrary;
+
+		protected bool UseDefaultInspector;
+
+		protected string IdPropertyValue => _idProperty.stringValue;
 
 		protected virtual void OnEnable()
 		{
@@ -28,8 +31,8 @@ namespace Core.Editor.CustomEditors
 
 		protected virtual void InitializeProperties()
 		{
-			IdProperty = serializedObject.FindProperty(DefinitionFieldNames.IdFieldName);
-			NameProperty = serializedObject.FindProperty(DefinitionFieldNames.NameFieldName);
+			_idProperty = serializedObject.FindProperty(DefinitionFieldNames.IdFieldName);
+			_nameProperty = serializedObject.FindProperty(DefinitionFieldNames.NameFieldName);
 		}
 
 		private void InitializeLibrary()
@@ -41,7 +44,7 @@ namespace Core.Editor.CustomEditors
 
 		private void UpdateIsInLibraryFlag()
 		{
-			var id = IdProperty.stringValue;
+			var id = _idProperty.stringValue;
 
 			_definitionIsInLibrary = _definitionLibrary.Definitions.Any(item => item.Id == id);
 		}
@@ -106,8 +109,8 @@ namespace Core.Editor.CustomEditors
 
 		protected virtual void DrawBaseFields()
 		{
-			EditorGUILayout.PropertyField(IdProperty);
-			EditorGUILayout.PropertyField(NameProperty);
+			EditorGUILayout.PropertyField(_idProperty);
+			EditorGUILayout.PropertyField(_nameProperty);
 		}
 
 		private void DrawLibraryStatusLabel()
