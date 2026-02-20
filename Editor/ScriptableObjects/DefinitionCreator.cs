@@ -185,6 +185,10 @@ namespace Core.Editor
 					property.boolValue = (bool)value;
 					break;
 
+				case SerializedPropertyType.Enum:
+					property.enumValueIndex = (int)value;
+					break;
+
 				case SerializedPropertyType.String:
 					property.stringValue = (string)value;
 					break;
