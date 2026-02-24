@@ -24,7 +24,7 @@ namespace Core.Editor
 		protected string DefinitionName;
 		protected bool InitializationError;
 		protected DefaultAsset TargetFolder;
-		
+
 		protected abstract string DefaultFolderPath { get; }
 
 		private void OnEnable()
@@ -191,6 +191,10 @@ namespace Core.Editor
 
 				case SerializedPropertyType.String:
 					property.stringValue = (string)value;
+					break;
+
+				case SerializedPropertyType.Vector2Int:
+					property.vector2IntValue = (Vector2Int)value;
 					break;
 
 				case SerializedPropertyType.ObjectReference:
