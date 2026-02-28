@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Core.MVC
 {
@@ -37,12 +38,34 @@ namespace Core.MVC
 			return controller;
 		}
 
+		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null)
+			where TController : BaseController<TView, TModel>
+			where TView : BaseView
+			where TModel : BaseModel
+		{
+			if (!assetReference.IsValid())
+			{
+				await assetReference.LoadAssetAsync().Task;
+			}
+
+			var prefab = assetReference.Asset as GameObject;
+			var gameObject = Object.Instantiate(prefab);
+
+			var view = gameObject.GetComponent<TView>();
+			var model = CreateModel<TModel>();
+			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+
+			TryCallInitialize(controller);
+
+			return controller;
+		}
+
 		public TController FindObjectAndBind<TController, TView, TModel>(object id = null)
 			where TController : BaseController<TView, TModel>
 			where TView : BaseView
 			where TModel : BaseModel
 		{
-			var view = UnityEngine.Object.FindAnyObjectByType<TView>();
+			var view = Object.FindAnyObjectByType<TView>();
 			if (view == null)
 				throw new NullReferenceException($"No GameObject found with the {typeof(TView)} type.");
 
