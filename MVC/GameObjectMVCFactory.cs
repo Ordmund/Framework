@@ -20,13 +20,13 @@ namespace Core.MVC
 			_prefabsPathProvider = prefabsPathProvider;
 		}
 
-		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null)
+		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null)
 			where TController : BaseController<TView, TModel>
 			where TView : BaseView
 			where TModel : BaseModel
 		{
 			path ??= _prefabsPathProvider.GetPathByViewType<TView>();
-			var asyncOperationHandle = Addressables.InstantiateAsync(path);
+			var asyncOperationHandle = Addressables.InstantiateAsync(path, parent);
 			var gameObject = await asyncOperationHandle.Task;
 
 			var view = gameObject.GetComponent<TView>();
@@ -38,7 +38,7 @@ namespace Core.MVC
 			return controller;
 		}
 
-		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null)
+		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null)
 			where TController : BaseController<TView, TModel>
 			where TView : BaseView
 			where TModel : BaseModel
@@ -49,7 +49,7 @@ namespace Core.MVC
 			}
 
 			var prefab = assetReference.Asset as GameObject;
-			var gameObject = Object.Instantiate(prefab);
+			var gameObject = Object.Instantiate(prefab, parent);
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();

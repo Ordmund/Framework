@@ -6,12 +6,12 @@ namespace Core.MVC
 {
 	public interface IGameObjectMVCFactory
 	{
-		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null)
+		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null)
 			where TController : BaseController<TView, TModel>
 			where TView : BaseView
 			where TModel : BaseModel;
 
-		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null)
+		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null)
 			where TController : BaseController<TView, TModel>
 			where TView : BaseView
 			where TModel : BaseModel;
