@@ -12,12 +12,14 @@ namespace Core.Binders
 			_container = container;
 		}
 
-		public void Bind<TPoolable, TMemoryPool>(GameObject prefab, int initialSize, Transform parent = null) where TPoolable : IPoolable where TMemoryPool : IMemoryPool
+		public TMemoryPool Bind<TPoolable, TMemoryPool>(GameObject prefab, int initialSize, Transform parent = null) where TPoolable : IPoolable where TMemoryPool : IMemoryPool
 		{
 			_container.BindMemoryPool<TPoolable, TMemoryPool>()
 				.WithInitialSize(initialSize)
 				.FromComponentInNewPrefab(prefab)
 				.UnderTransform(parent);
+
+			return _container.Resolve<TMemoryPool>();
 		}
 	}
 }
