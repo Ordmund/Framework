@@ -27,6 +27,9 @@ namespace Core.Managers.Definitions
 				definitions.Add(item);
 			}
 
+			EditorUtility.SetDirty(this);
+			AssetDatabase.SaveAssets();
+
 			Debug.Log($"<color=green>{typeof(T).Name} Library updated with {definitions.Count} definitions!</color>");
 #endif
 		}
