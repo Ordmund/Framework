@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Core.Tasks;
 using UnityEngine;
 
@@ -6,6 +7,22 @@ namespace Core.Managers
 {
 	public static class TaskExtensions
 	{
+		/// <summary>
+		/// Runs the specified task and handles any exceptions that occur during the process
+		/// </summary>
+		/// <param name="task">A task that needs to be started from synchronous code</param>
+		public static async void RunAndForget(this Task task)
+		{
+			try
+			{
+				await task;
+			}
+			catch (Exception error)
+			{
+				Debug.LogError(error);
+			}
+		}
+
 		/// <summary>
 		/// Runs the specified task and handles any exceptions that occur during the process
 		/// </summary>
