@@ -61,6 +61,11 @@ namespace Core.Managers.Definitions
 			throw new DefinitionNotFoundException($"{DefinitionName} with id {id} not found.");
 		}
 
+		public bool IsRegistered(string id)
+		{
+			return _definitions.ContainsKey(id);
+		}
+
 		public void Register(TDefinition item)
 		{
 			if (item == null)

@@ -27,6 +27,13 @@ namespace Core.Managers.Definitions
 		TConcrete Get<TConcrete>(string id) where TConcrete : TDefinition;
 
 		/// <summary>
+		/// Determines whether a definition with the given identifier is registered.
+		/// </summary>
+		/// <param name="id">The identifier to check.</param>
+		/// <returns><c>true</c> if the definition is registered; otherwise, <c>false</c>.</returns>
+		bool IsRegistered(string id);
+
+		/// <summary>
 		/// Registers a definition using its identifier. Overwrites any existing definition with the same identifier.
 		/// </summary>
 		/// <param name="item">The definition to register.</param>
