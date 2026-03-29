@@ -123,6 +123,13 @@ namespace Core.Managers.Files
 			return Array.Empty<string>();
 		}
 
+		public static string GetPathToFilesDirectory()
+		{
+			return string.IsNullOrEmpty(DependenciesProvider.PathToFilesDirectory)
+				? throw new PathNotFoundException("Path to save files directory not found!")
+				: DependenciesProvider.PathToFilesDirectory;
+		}
+
 		private static void ValidateSerializability(Type type)
 		{
 			if (type.IsPrimitive || type.IsArray || type == typeof(string) || (!type.IsClass && !type.IsValueType) || !type.IsSerializable)
@@ -150,13 +157,6 @@ namespace Core.Managers.Files
 			var fullPath = string.IsNullOrEmpty(directoryName) ? filesPath : Path.Combine(filesPath, directoryName);
 
 			return fullPath;
-		}
-
-		private static string GetPathToFilesDirectory()
-		{
-			return string.IsNullOrEmpty(DependenciesProvider.PathToFilesDirectory)
-				? throw new PathNotFoundException("Path to save files directory not found!")
-				: DependenciesProvider.PathToFilesDirectory;
 		}
 	}
 }
