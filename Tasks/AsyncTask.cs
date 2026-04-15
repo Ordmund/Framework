@@ -1,5 +1,6 @@
 using System;
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 namespace Core.Tasks
 {
@@ -9,7 +10,7 @@ namespace Core.Tasks
 		private event Action OnCanceled;
 		private event Action OnFaulted;
 
-		public abstract Task Execute();
+		public abstract UniTask Execute(CancellationToken token);
 
 		public AsyncTask OnComplete(Action action)
 		{
@@ -32,17 +33,17 @@ namespace Core.Tasks
 			return this;
 		}
 
-		public void InvokeOnCompleted()
+		internal void InvokeOnCompleted()
 		{
 			OnCompleted?.Invoke();
 		}
 
-		public void InvokeOnCanceled()
+		internal void InvokeOnCanceled()
 		{
 			OnCanceled?.Invoke();
 		}
 
-		public void InvokeOnFaulted()
+		internal void InvokeOnFaulted()
 		{
 			OnFaulted?.Invoke();
 		}
@@ -56,12 +57,7 @@ namespace Core.Tasks
 		private event Action OnCanceled;
 		private event Action OnFaulted;
 
-		public abstract Task<T> Execute();
-
-		public void SaveResult(T result)
-		{
-			Result = result;
-		}
+		public abstract UniTask<T> Execute(CancellationToken token);
 
 		public AsyncTask<T> OnComplete(Action<T> action)
 		{
@@ -84,17 +80,22 @@ namespace Core.Tasks
 			return this;
 		}
 
-		public void InvokeOnCompleted()
+		internal void SaveResult(T result)
+		{
+			Result = result;
+		}
+
+		internal void InvokeOnCompleted()
 		{
 			OnCompleted?.Invoke(Result);
 		}
 
-		public void InvokeOnCanceled()
+		internal void InvokeOnCanceled()
 		{
 			OnCanceled?.Invoke();
 		}
 
-		public void InvokeOnFaulted()
+		internal void InvokeOnFaulted()
 		{
 			OnFaulted?.Invoke();
 		}

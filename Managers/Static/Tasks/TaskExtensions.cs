@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using System.Threading;
 using Core.Tasks;
 using UnityEngine;
 
@@ -8,84 +8,56 @@ namespace Core.Managers
 	public static class TaskExtensions
 	{
 		/// <summary>
-		/// Runs the specified task and handles any exceptions that occur during the process
+		/// Runs the specified task and handles any exceptions that occur during the process.
 		/// </summary>
-		/// <param name="task">A task that needs to be started from synchronous code</param>
-		public static async void RunAndForget(this Task task)
+		/// <param name="asyncTask">The asynchronous task to run from synchronous code.</param>
+		public static async void FireAndForget(this AsyncTask asyncTask)
 		{
 			try
 			{
-				await task;
+				await asyncTask.Execute(CancellationToken.None);
+
+				asyncTask.InvokeOnCompleted();
+			}
+			catch (OperationCanceledException)
+			{
+				Debug.Log($"{asyncTask.GetType().Name} is canceled.");
+
+				asyncTask.InvokeOnCanceled();
 			}
 			catch (Exception error)
 			{
 				Debug.LogError(error);
-			}
-		}
 
-		/// <summary>
-		/// Runs the specified task and handles any exceptions that occur during the process
-		/// </summary>
-		/// <param name="asyncTask">A task that needs to be started from synchronous code</param>
-		public static async void RunAndForget(this AsyncTask asyncTask)
-		{
-			try
-			{
-				var task = asyncTask.Execute();
-
-				await task;
-
-				if (task.IsCompletedSuccessfully)
-				{
-					asyncTask.InvokeOnCompleted();
-				}
-
-				if (task.IsCanceled)
-				{
-					asyncTask.InvokeOnCanceled();
-
-					Debug.Log($"{asyncTask.GetType().Name} is canceled");
-				}
-			}
-			catch (Exception error)
-			{
 				asyncTask.InvokeOnFaulted();
-
-				Debug.LogError(error);
 			}
 		}
 
 		/// <summary>
-		/// Runs the specified task and handles any exceptions that occur during the process
+		/// Runs the specified task and handles any exceptions that occur during the process.
 		/// </summary>
-		/// <param name="asyncTask">A task that needs to be started from synchronous code</param>
+		/// <param name="asyncTask">The asynchronous task to run from synchronous code.</param>
 		/// <typeparam name="T">The type of result of successful task completion</typeparam>
-		public static async void RunAndForget<T>(this AsyncTask<T> asyncTask)
+		public static async void FireAndForget<T>(this AsyncTask<T> asyncTask)
 		{
 			try
 			{
-				var task = asyncTask.Execute();
+				var result = await asyncTask.Execute(CancellationToken.None);
 
-				await task;
+				asyncTask.SaveResult(result);
+				asyncTask.InvokeOnCompleted();
+			}
+			catch (OperationCanceledException)
+			{
+				Debug.Log($"{asyncTask.GetType().Name} is canceled.");
 
-				if (task.IsCompletedSuccessfully)
-				{
-					asyncTask.SaveResult(task.Result);
-					asyncTask.InvokeOnCompleted();
-				}
-
-				if (task.IsCanceled)
-				{
-					asyncTask.InvokeOnCanceled();
-
-					Debug.Log($"{asyncTask.GetType().Name} is canceled");
-				}
+				asyncTask.InvokeOnCanceled();
 			}
 			catch (Exception error)
 			{
-				asyncTask.InvokeOnFaulted();
-
 				Debug.LogError(error);
+
+				asyncTask.InvokeOnFaulted();
 			}
 		}
 	}
