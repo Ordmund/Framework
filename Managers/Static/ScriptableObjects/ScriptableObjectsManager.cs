@@ -7,7 +7,7 @@ namespace Core.Managers.ScriptableObjects
 {
 	public static class ScriptableObjectsManager
 	{
-		private static readonly List<ScriptableObject> _scriptableObjects = new();
+		private static readonly List<ScriptableObject> ScriptableObjects = new();
 		private static ScriptableObjectsPathHandler _pathHandler;
 
 		private static ScriptableObjectsPathHandler PathHandler => _pathHandler != null ? _pathHandler : _pathHandler = ResourcesManager.Load<ScriptableObjectsPathHandler>(PathHandlerPath);
@@ -23,7 +23,7 @@ namespace Core.Managers.ScriptableObjects
 		{
 			name ??= typeof(TScriptableObject).Name;
 
-			var searchResult = _scriptableObjects.FirstOrDefault(loadedScriptableObject => loadedScriptableObject.name == name);
+			var searchResult = ScriptableObjects.FirstOrDefault(loadedScriptableObject => loadedScriptableObject.name == name);
 			if (searchResult != null)
 				return searchResult as TScriptableObject;
 
@@ -32,7 +32,7 @@ namespace Core.Managers.ScriptableObjects
 
 			if (scriptableObject != null)
 			{
-				_scriptableObjects.Add(scriptableObject);
+				ScriptableObjects.Add(scriptableObject);
 				return scriptableObject;
 			}
 
@@ -42,26 +42,26 @@ namespace Core.Managers.ScriptableObjects
 
 		public static void Unload(ScriptableObject scriptableObject)
 		{
-			if (_scriptableObjects.Contains(scriptableObject))
-				_scriptableObjects.Remove(scriptableObject);
+			if (ScriptableObjects.Contains(scriptableObject))
+				ScriptableObjects.Remove(scriptableObject);
 
 			ResourcesManager.Unload(scriptableObject);
 		}
 
 		public static void Unload(string name)
 		{
-			var searchResult = _scriptableObjects.FirstOrDefault(loadedScriptableObject => loadedScriptableObject.name == name);
+			var searchResult = ScriptableObjects.FirstOrDefault(loadedScriptableObject => loadedScriptableObject.name == name);
 			if (searchResult == null)
 				return;
 
-			_scriptableObjects.Remove(searchResult);
+			ScriptableObjects.Remove(searchResult);
 			ResourcesManager.Unload(searchResult);
 		}
 
 		public static void UnloadAll()
 		{
-			_scriptableObjects.ForEach(ResourcesManager.Unload);
-			_scriptableObjects.Clear();
+			ScriptableObjects.ForEach(ResourcesManager.Unload);
+			ScriptableObjects.Clear();
 		}
 	}
 }
