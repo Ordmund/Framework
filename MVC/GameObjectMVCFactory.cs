@@ -1,7 +1,9 @@
 using System;
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 using Object = UnityEngine.Object;
 
@@ -20,14 +22,14 @@ namespace Core.MVC
 			_prefabsPathProvider = prefabsPathProvider;
 		}
 
-		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null, CancellationToken token = default)
 			where TController : BaseController<TView, TModel>
-			where TView : BaseView
+			where TView : BaseAddressableView
 			where TModel : BaseModel
 		{
 			path ??= _prefabsPathProvider.GetPathByViewType<TView>();
 			var asyncOperationHandle = Addressables.InstantiateAsync(path, parent);
-			var gameObject = await asyncOperationHandle.Task;
+			var gameObject = await AwaitSafely(asyncOperationHandle, token);
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
@@ -38,14 +40,16 @@ namespace Core.MVC
 			return controller;
 		}
 
-		public async Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null, CancellationToken token = default)
 			where TController : BaseController<TView, TModel>
-			where TView : BaseView
+			where TView : BaseAddressableView
 			where TModel : BaseModel
 		{
 			if (!assetReference.IsValid())
 			{
-				await assetReference.LoadAssetAsync().Task;
+				var asyncOperationHandle = assetReference.LoadAssetAsync();
+
+				await AwaitSafely(asyncOperationHandle, token);
 			}
 
 			var prefab = assetReference.Asset as GameObject;
@@ -149,6 +153,19 @@ namespace Core.MVC
 			if (controller is ILateTickable lateTickable)
 			{
 				_tickableManager.AddLate(lateTickable);
+			}
+		}
+
+		private static async UniTask<TObject> AwaitSafely<TObject>(AsyncOperationHandle<TObject> asyncOperationHandle, CancellationToken token)
+		{
+			try
+			{
+				return await asyncOperationHandle.ToUniTask(cancellationToken: token);
+			}
+			catch (Exception)
+			{
+				Addressables.Release(asyncOperationHandle);
+				throw;
 			}
 		}
 

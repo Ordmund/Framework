@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Core.Managers
 {
-	public static class TaskExtensions
+	public static class AsyncTaskExtensions
 	{
 		/// <summary>
 		/// Runs the specified task and handles any exceptions that occur during the process.

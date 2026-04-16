@@ -1,4 +1,5 @@
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -6,14 +7,14 @@ namespace Core.MVC
 {
 	public interface IGameObjectMVCFactory
 	{
-		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null)
+		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null, CancellationToken token = default)
 			where TController : BaseController<TView, TModel>
-			where TView : BaseView
+			where TView : BaseAddressableView
 			where TModel : BaseModel;
 
-		Task<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null)
+		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null, CancellationToken token = default)
 			where TController : BaseController<TView, TModel>
-			where TView : BaseView
+			where TView : BaseAddressableView
 			where TModel : BaseModel;
 
 		TController FindObjectAndBind<TController, TView, TModel>(object id = null)
