@@ -13,7 +13,7 @@ namespace Core.MVC
 			_prefabsPaths = ScriptableObjectsManager.Load<PrefabsPaths>();
 		}
 
-		public string GetPathByViewType<T>() where T : BaseView
+		public string GetPathByViewType<T>() where T : ViewBase
 		{
 			return _prefabsPaths.GetPath<T>();
 		}

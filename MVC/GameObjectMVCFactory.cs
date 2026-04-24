@@ -23,9 +23,9 @@ namespace Core.MVC
 		}
 
 		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null, CancellationToken token = default)
-			where TController : BaseController<TView, TModel>
-			where TView : BaseAddressableView
-			where TModel : BaseModel
+			where TController : ControllerBase<TView, TModel>
+			where TView : AddressableViewBase
+			where TModel : ModelBase
 		{
 			path ??= _prefabsPathProvider.GetPathByViewType<TView>();
 			var asyncOperationHandle = Addressables.InstantiateAsync(path, parent);
@@ -41,9 +41,9 @@ namespace Core.MVC
 		}
 
 		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null, CancellationToken token = default)
-			where TController : BaseController<TView, TModel>
-			where TView : BaseAddressableView
-			where TModel : BaseModel
+			where TController : ControllerBase<TView, TModel>
+			where TView : AddressableViewBase
+			where TModel : ModelBase
 		{
 			if (!assetReference.IsValid())
 			{
@@ -65,9 +65,9 @@ namespace Core.MVC
 		}
 
 		public TController FindObjectAndBind<TController, TView, TModel>(object id = null)
-			where TController : BaseController<TView, TModel>
-			where TView : BaseView
-			where TModel : BaseModel
+			where TController : ControllerBase<TView, TModel>
+			where TView : ViewBase
+			where TModel : ModelBase
 		{
 			var view = Object.FindAnyObjectByType<TView>();
 			if (view == null)
@@ -82,9 +82,9 @@ namespace Core.MVC
 		}
 
 		public TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren, object id = null)
-			where TController : BaseController<TView, TModel>
-			where TView : BaseView
-			where TModel : BaseModel
+			where TController : ControllerBase<TView, TModel>
+			where TView : ViewBase
+			where TModel : ModelBase
 		{
 			var view = allowSearchInChildren ? gameObject.GetComponentInChildren<TView>() : gameObject.GetComponent<TView>();
 
@@ -100,7 +100,7 @@ namespace Core.MVC
 		}
 
 		public TController BindToView<TController, TView, TModel>(TView view, object id = null)
-			where TController : BaseController<TView, TModel> where TView : BaseView where TModel : BaseModel
+			where TController : ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
 		{
 			var model = CreateModel<TModel>();
 			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
@@ -169,7 +169,7 @@ namespace Core.MVC
 			}
 		}
 
-		private static TModel CreateModel<TModel>() where TModel : BaseModel
+		private static TModel CreateModel<TModel>() where TModel : ModelBase
 		{
 			return Activator.CreateInstance<TModel>();
 		}

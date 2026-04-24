@@ -2,7 +2,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Core.MVC
 {
-	public abstract class BaseAddressableView : BaseView
+	public abstract class AddressableViewBase : ViewBase
 	{
 		public void OnDestroy()
 		{

@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Core.MVC
 {
-	public abstract class BaseController<TView, TModel> where TView : BaseView where TModel : BaseModel
+	public abstract class ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
 	{
 		protected TView View { get; }
 		protected TModel Model { get; private set; }
 
-		protected BaseController(TView view, TModel model)
+		protected ControllerBase(TView view, TModel model)
 		{
 			View = view;
 			Model = model;

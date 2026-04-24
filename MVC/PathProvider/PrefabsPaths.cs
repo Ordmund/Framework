@@ -8,7 +8,7 @@ namespace Core.MVC
 	{
 		[SerializeField] private List<PathNamePair> paths = new();
 
-		public string GetPath<T>() where T : BaseView
+		public string GetPath<T>() where T : ViewBase
 		{
 			var typeName = typeof(T).Name;
 
