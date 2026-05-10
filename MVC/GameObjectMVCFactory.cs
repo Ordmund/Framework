@@ -22,7 +22,7 @@ namespace Core.MVC
 			_prefabsPathProvider = prefabsPathProvider;
 		}
 
-		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null, CancellationToken token = default)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, Transform parent = null, CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase
@@ -33,14 +33,14 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+			var controller = CreateController<TController, TView, TModel>(view, model);
 
 			TryCallInitialize(controller);
 
 			return controller;
 		}
 
-		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null, CancellationToken token = default)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, Transform parent = null, CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase
@@ -57,14 +57,14 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+			var controller = CreateController<TController, TView, TModel>(view, model);
 
 			TryCallInitialize(controller);
 
 			return controller;
 		}
 
-		public TController FindObjectAndBind<TController, TView, TModel>(object id = null)
+		public TController FindObjectAndBind<TController, TView, TModel>()
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase
@@ -74,14 +74,14 @@ namespace Core.MVC
 				throw new NullReferenceException($"No GameObject found with the {typeof(TView)} type.");
 
 			var model = CreateModel<TModel>();
-			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+			var controller = CreateController<TController, TView, TModel>(view, model);
 
 			TryCallInitialize(controller);
 
 			return controller;
 		}
 
-		public TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren, object id = null)
+		public TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren)
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase
@@ -92,42 +92,28 @@ namespace Core.MVC
 				throw new NullReferenceException($"{typeof(TView)} component not found on the {gameObject.name} GameObject.");
 
 			var model = CreateModel<TModel>();
-			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+			var controller = CreateController<TController, TView, TModel>(view, model);
 
 			TryCallInitialize(controller);
 
 			return controller;
 		}
 
-		public TController BindToView<TController, TView, TModel>(TView view, object id = null)
+		public TController BindToView<TController, TView, TModel>(TView view)
 			where TController : ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
 		{
 			var model = CreateModel<TModel>();
-			var controller = BindAndResolve<TController, TView, TModel>(view, model, id);
+			var controller = CreateController<TController, TView, TModel>(view, model);
 
+			TryRegisterTickable(controller);
 			TryCallInitialize(controller);
 
 			return controller;
 		}
 
-		private TController BindAndResolve<TController, TView, TModel>(TView view, TModel model, object id = null)
+		private TController CreateController<TController, TView, TModel>(TView view, TModel model)
 		{
-			TController controller;
-
-			if (id != null)
-			{
-				_container.Bind<TController>().WithId(id).AsTransient().WithArguments(view, model).NonLazy();
-				controller = _container.ResolveId<TController>(id);
-			}
-			else
-			{
-				_container.BindInterfacesAndSelfTo<TController>().AsSingle().WithArguments(view, model).NonLazy();
-				controller = _container.Resolve<TController>();
-			}
-
-			TryRegisterTickable(controller);
-
-			return controller;
+			return _container.Instantiate<TController>(new object[] { view, model });
 		}
 
 		private static void TryCallInitialize<TController>(TController controller)

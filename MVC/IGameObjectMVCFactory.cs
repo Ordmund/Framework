@@ -7,27 +7,27 @@ namespace Core.MVC
 {
 	public interface IGameObjectMVCFactory
 	{
-		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, object id = null, Transform parent = null, CancellationToken token = default)
+		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, Transform parent = null, CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase;
 
-		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, object id = null, Transform parent = null, CancellationToken token = default)
+		UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, Transform parent = null, CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase;
 
-		TController FindObjectAndBind<TController, TView, TModel>(object id = null)
+		TController FindObjectAndBind<TController, TView, TModel>()
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase;
 
-		TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren, object id = null)
+		TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren)
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase;
 
-		TController BindToView<TController, TView, TModel>(TView view, object id = null)
+		TController BindToView<TController, TView, TModel>(TView view)
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase;
