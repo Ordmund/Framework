@@ -28,7 +28,7 @@ namespace Core.Installers
 		{
 			Container.Bind<IGameObjectMVCFactory>().To<GameObjectMVCFactory>().AsSingle();
 
-			Container.BindInterfacesAndSelfTo<ControllerRegistry>().AsSingle();
+			Container.BindInterfacesAndSelfTo<ControllerLifetimeRegistry>().AsSingle();
 			Container.BindInterfacesAndSelfTo<PrefabsPathProvider>().AsSingle();
 		}
 	}

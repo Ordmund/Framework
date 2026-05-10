@@ -1,6 +1,6 @@
 namespace Core.MVC
 {
-	public interface IControllerRegistry
+	public interface IControllerLifetimeRegistry
 	{
 		void Register(IController controller);
 		void Release(IController controller);

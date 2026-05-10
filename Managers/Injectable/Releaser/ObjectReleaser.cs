@@ -14,6 +14,12 @@ namespace Core.Managers.Injectable
 
 		public void Release(object instance)
 		{
+			UnsubscribeFromTickableManager(instance);
+			Dispose(instance);
+		}
+
+		private void UnsubscribeFromTickableManager(object instance)
+		{
 			if (instance is ITickable tickable)
 			{
 				_tickableManager.Remove(tickable);
@@ -28,7 +34,10 @@ namespace Core.Managers.Injectable
 			{
 				_tickableManager.RemoveLate(lateTickable);
 			}
+		}
 
+		private void Dispose(object instance)
+		{
 			if (instance is IDisposable disposable)
 			{
 				disposable.Dispose();
