@@ -33,9 +33,7 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = CreateController<TController, TView, TModel>(view, model);
-
-			TryCallInitialize(controller);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
 
 			return controller;
 		}
@@ -57,9 +55,7 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = CreateController<TController, TView, TModel>(view, model);
-
-			TryCallInitialize(controller);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
 
 			return controller;
 		}
@@ -74,9 +70,7 @@ namespace Core.MVC
 				throw new NullReferenceException($"No GameObject found with the {typeof(TView)} type.");
 
 			var model = CreateModel<TModel>();
-			var controller = CreateController<TController, TView, TModel>(view, model);
-
-			TryCallInitialize(controller);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
 
 			return controller;
 		}
@@ -92,9 +86,7 @@ namespace Core.MVC
 				throw new NullReferenceException($"{typeof(TView)} component not found on the {gameObject.name} GameObject.");
 
 			var model = CreateModel<TModel>();
-			var controller = CreateController<TController, TView, TModel>(view, model);
-
-			TryCallInitialize(controller);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
 
 			return controller;
 		}
@@ -103,17 +95,19 @@ namespace Core.MVC
 			where TController : ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
 		{
 			var model = CreateModel<TModel>();
-			var controller = CreateController<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+
+			return controller;
+		}
+
+		private TController CreateAndInitialize<TController, TView, TModel>(TView view, TModel model)
+		{
+			var controller = _container.Instantiate<TController>(new object[] { view, model });
 
 			TryRegisterTickable(controller);
 			TryCallInitialize(controller);
 
 			return controller;
-		}
-
-		private TController CreateController<TController, TView, TModel>(TView view, TModel model)
-		{
-			return _container.Instantiate<TController>(new object[] { view, model });
 		}
 
 		private static void TryCallInitialize<TController>(TController controller)
