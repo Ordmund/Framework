@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Zenject;
 
 namespace Core.MVC
 {
-	public class ControllerRegistry : IControllerRegistry
+	public class ControllerRegistry : IControllerRegistry, ILateDisposable
 	{
 		private readonly List<IController> _controllers = new();
 
@@ -25,6 +26,11 @@ namespace Core.MVC
 		public void ReleaseAll()
 		{
 			_controllers.Clear();
+		}
+
+		public void LateDispose()
+		{
+			ReleaseAll();
 		}
 	}
 }
