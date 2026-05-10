@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Core.MVC
 {
-	public abstract class ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
+	public abstract class ControllerBase<TView, TModel> : IController where TView : ViewBase where TModel : ModelBase
 	{
 		protected TView View { get; }
 		protected TModel Model { get; private set; }
