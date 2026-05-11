@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Core.MVC
 {
-	public class ControllerLifetimeRegistry : IControllerLifetimeRegistry, ILateDisposable
+	public class ControllerLifetimeRegistry : IControllerLifetimeRegistry, IDisposable, ILateDisposable
 	{
 		private readonly IObjectReleaser _objectReleaser;
 
@@ -42,9 +42,23 @@ namespace Core.MVC
 			_controllers.Clear();
 		}
 
+		public void Dispose()
+		{
+			foreach (var controller in _controllers)
+			{
+				_objectReleaser.UnsubscribeFromTickable(controller);
+				_objectReleaser.Dispose(controller);
+			}
+		}
+
 		public void LateDispose()
 		{
-			ReleaseAll();
+			foreach (var controller in _controllers)
+			{
+				_objectReleaser.LateDispose(controller);
+			}
+
+			_controllers.Clear();
 		}
 	}
 }
