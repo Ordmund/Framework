@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -22,7 +23,8 @@ namespace Core.MVC
 			_prefabsPathProvider = prefabsPathProvider;
 		}
 
-		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, Transform parent = null, CancellationToken token = default)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(string path = null, Transform parent = null, object[] extraArguments = null,
+			CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase
@@ -33,12 +35,13 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArguments);
 
 			return controller;
 		}
 
-		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, Transform parent = null, CancellationToken token = default)
+		public async UniTask<TController> InstantiateAndBindAsync<TController, TView, TModel>(AssetReferenceGameObject assetReference, Transform parent = null, object[] extraArguments = null,
+			CancellationToken token = default)
 			where TController : ControllerBase<TView, TModel>
 			where TView : AddressableViewBase
 			where TModel : ModelBase
@@ -55,12 +58,12 @@ namespace Core.MVC
 
 			var view = gameObject.GetComponent<TView>();
 			var model = CreateModel<TModel>();
-			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArguments);
 
 			return controller;
 		}
 
-		public TController FindObjectAndBind<TController, TView, TModel>()
+		public TController FindObjectAndBind<TController, TView, TModel>(object[] extraArguments = null)
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase
@@ -70,12 +73,12 @@ namespace Core.MVC
 				throw new NullReferenceException($"No GameObject found with the {typeof(TView)} type.");
 
 			var model = CreateModel<TModel>();
-			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArguments);
 
 			return controller;
 		}
 
-		public TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren)
+		public TController GetComponentAndBind<TController, TView, TModel>(GameObject gameObject, bool allowSearchInChildren, object[] extraArguments = null)
 			where TController : ControllerBase<TView, TModel>
 			where TView : ViewBase
 			where TModel : ModelBase
@@ -86,23 +89,26 @@ namespace Core.MVC
 				throw new NullReferenceException($"{typeof(TView)} component not found on the {gameObject.name} GameObject.");
 
 			var model = CreateModel<TModel>();
-			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArguments);
 
 			return controller;
 		}
 
-		public TController BindToView<TController, TView, TModel>(TView view)
+		public TController BindToView<TController, TView, TModel>(TView view, object[] extraArguments = null)
 			where TController : ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
 		{
 			var model = CreateModel<TModel>();
-			var controller = CreateAndInitialize<TController, TView, TModel>(view, model);
+			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArguments);
 
 			return controller;
 		}
 
-		private TController CreateAndInitialize<TController, TView, TModel>(TView view, TModel model)
+		private TController CreateAndInitialize<TController, TView, TModel>(TView view, TModel model, object[] extraArguments = null)
 		{
-			var controller = _container.Instantiate<TController>(new object[] { view, model });
+			var baseArguments = new object[] { view, model };
+			var arguments = extraArguments != null ? baseArguments.Concat(extraArguments).ToArray() : baseArguments;
+
+			var controller = _container.Instantiate<TController>(arguments);
 
 			TryRegisterTickable(controller);
 			TryCallInitialize(controller);
