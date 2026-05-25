@@ -1,4 +1,4 @@
-namespace Core.Managers.Behaviours
+namespace Framework.Managers.Behaviours
 {
 	public interface IBehaviourFactory<TBehaviour> where TBehaviour : Behaviour
 	{

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public abstract class ViewBase : MonoBehaviour
 	{

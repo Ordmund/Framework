@@ -1,7 +1,7 @@
-using Core.Managers.ScriptableObjects;
+using Framework.Managers.ScriptableObjects;
 using UnityEngine;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public abstract class ControllerBase<TView, TModel> : IController where TView : ViewBase where TModel : ModelBase
 	{

@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
-using Core.Managers.Behaviours;
-using Core.Managers.Definitions;
+using Framework.Managers.Behaviours;
+using Framework.Managers.Definitions;
 using UnityEditor;
 
-namespace Core.Editor.CustomEditors
+namespace Framework.Editor.CustomEditors
 {
 	public class BehaviourDefinitionCustomEditor<TDefinition, TBehaviour, TDefinitionLibrary> : DefinitionCustomEditor<TDefinition, TDefinitionLibrary>
 		where TDefinition : BehaviourDefinition

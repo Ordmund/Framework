@@ -1,4 +1,4 @@
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public interface IPrefabsPathProvider
 	{

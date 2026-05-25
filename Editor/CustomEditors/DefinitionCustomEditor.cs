@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using Core.Managers.Definitions;
-using Core.Managers.ScriptableObjects;
+using Framework.Managers.Definitions;
+using Framework.Managers.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
-namespace Core.Editor.CustomEditors
+namespace Framework.Editor.CustomEditors
 {
 	public abstract class DefinitionCustomEditor<TDefinition, TDefinitionLibrary> : UnityEditor.Editor where TDefinition : Definition where TDefinitionLibrary : DefinitionLibrary<TDefinition>
 	{

@@ -1,9 +1,9 @@
-using Core.Editor.CustomEditors;
-using Core.Managers.Behaviours;
-using Core.Managers.Definitions;
+using Framework.Editor.CustomEditors;
+using Framework.Managers.Behaviours;
+using Framework.Managers.Definitions;
 using UnityEditor;
 
-namespace Core.Editor
+namespace Framework.Editor
 {
 	public abstract class BehaviourDefinitionCreator<TDefinition, TBehaviour, TDefinitionLibrary> : DefinitionCreator<TDefinition, TDefinitionLibrary>
 		where TDefinition : BehaviourDefinition

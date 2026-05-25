@@ -1,7 +1,7 @@
 using System;
 using Zenject;
 
-namespace Core.Managers.Injectable
+namespace Framework.Managers.Injectable
 {
 	public class ObjectReleaser : IObjectReleaser
 	{

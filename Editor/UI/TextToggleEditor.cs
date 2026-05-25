@@ -1,7 +1,7 @@
-using Core.UI;
+using Framework.UI;
 using UnityEditor;
 
-namespace Core.Editor.UI
+namespace Framework.Editor.UI
 {
 	[CustomEditor(typeof(TextToggle))]
 	public class TextToggleEditor : UnityEditor.UI.ToggleEditor

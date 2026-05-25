@@ -1,6 +1,6 @@
 using UnityEngine.AddressableAssets;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public abstract class AddressableViewBase : ViewBase
 	{

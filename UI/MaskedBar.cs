@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.UI
+namespace Framework.UI
 {
 	public class MaskedBar : MonoBehaviour
 	{

@@ -1,8 +1,8 @@
 using System;
-using Core.Managers.ScriptableObjects;
+using Framework.Managers.ScriptableObjects;
 using Zenject;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public class PrefabsPathProvider : IPrefabsPathProvider, IInitializable, IDisposable
 	{

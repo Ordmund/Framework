@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Core.Binders
+namespace Framework.Binders
 {
 	public interface IMemoryPoolBinder
 	{

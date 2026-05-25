@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public abstract class BehaviourDefinition : Definition
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Managers.ScriptableObjects
+namespace Framework.Managers.ScriptableObjects
 {
 	[Serializable]
 	public class ScriptableObjectPath

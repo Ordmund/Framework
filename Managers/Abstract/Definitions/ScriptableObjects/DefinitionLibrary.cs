@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Linq;
 #endif
 
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public abstract class DefinitionLibrary<T> : ScriptableObject where T : ScriptableObject
 	{

@@ -1,4 +1,4 @@
-namespace Core.Managers.Injectable
+namespace Framework.Managers.Injectable
 {
 	public interface IObjectReleaser
 	{

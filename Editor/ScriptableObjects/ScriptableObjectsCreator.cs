@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Core.Managers.Definitions;
-using Core.Managers.ScriptableObjects;
+using Framework.Managers.Definitions;
+using Framework.Managers.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
-namespace Core.Editor
+namespace Framework.Editor
 {
 	public class ScriptableObjectsCreator : EditorWindow
 	{

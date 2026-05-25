@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public interface IGameObjectMVCFactory
 	{

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Core.Managers.Injectable;
+using Framework.Managers.Injectable;
 using Zenject;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public class ControllerLifetimeRegistry : IControllerLifetimeRegistry, IDisposable, ILateDisposable
 	{

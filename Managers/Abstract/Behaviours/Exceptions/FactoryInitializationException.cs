@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Managers.Behaviours
+namespace Framework.Managers.Behaviours
 {
 	public class FactoryInitializationException : Exception
 	{

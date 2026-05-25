@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Core.Managers.ScriptableObjects;
+using Framework.Managers.ScriptableObjects;
 using UnityEngine;
 using Zenject;
 
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public abstract class DefinitionRegistry<TDefinition> : IDefinitionRegistry<TDefinition>, IInitializable where TDefinition : Definition
 	{

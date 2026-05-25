@@ -1,13 +1,13 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Core.Editor.CustomEditors;
-using Core.Managers.Definitions;
-using Core.Managers.ScriptableObjects;
+using Framework.Editor.CustomEditors;
+using Framework.Managers.Definitions;
+using Framework.Managers.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
-namespace Core.Editor
+namespace Framework.Editor
 {
 	public abstract class DefinitionCreator<TDefinition, TDefinitionLibrary> : EditorWindow where TDefinition : Definition where TDefinitionLibrary : DefinitionLibrary<TDefinition>
 	{

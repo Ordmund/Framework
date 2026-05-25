@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine.UI;
 
-namespace Core.UI
+namespace Framework.UI
 {
 	public class TextButton : Button
 	{

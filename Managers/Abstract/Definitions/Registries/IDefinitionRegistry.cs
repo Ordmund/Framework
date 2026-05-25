@@ -1,4 +1,4 @@
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public interface IDefinitionRegistry<TDefinition> where TDefinition : Definition
 	{

@@ -1,7 +1,7 @@
-using Core.UI;
+using Framework.UI;
 using UnityEditor;
 
-namespace Core.Editor.UI
+namespace Framework.Editor.UI
 {
 	[CustomEditor(typeof(TextButton))]
 	public class TextButtonEditor : UnityEditor.UI.ButtonEditor

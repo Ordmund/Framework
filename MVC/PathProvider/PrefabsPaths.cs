@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public class PrefabsPaths : ScriptableObject
 	{

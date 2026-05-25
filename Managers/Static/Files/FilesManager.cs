@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Core.Dependencies;
+using Framework.Dependencies;
 using UnityEngine;
 
-namespace Core.Managers.Files
+namespace Framework.Managers.Files
 {
 	public static class FilesManager
 	{

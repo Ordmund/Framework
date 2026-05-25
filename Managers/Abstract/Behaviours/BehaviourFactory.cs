@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Core.Managers.Behaviours
+namespace Framework.Managers.Behaviours
 {
 	public abstract class BehaviourFactory<TBehaviour, TFallbackBehaviour> : IBehaviourFactory<TBehaviour>, IInitializable where TBehaviour : Behaviour where TFallbackBehaviour : TBehaviour
 	{

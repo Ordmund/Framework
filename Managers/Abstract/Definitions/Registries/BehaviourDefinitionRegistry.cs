@@ -1,4 +1,4 @@
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public abstract class BehaviourDefinitionRegistry<TDefinition> : DefinitionRegistry<TDefinition>, IBehaviourDefinitionRegistry<TDefinition> where TDefinition : BehaviourDefinition
 	{

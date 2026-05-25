@@ -1,4 +1,4 @@
-namespace Core.Editor.CustomEditors
+namespace Framework.Editor.CustomEditors
 {
 	public static class DefinitionFieldNames
 	{

@@ -8,7 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 using Object = UnityEngine.Object;
 
-namespace Core.MVC
+namespace Framework.MVC
 {
 	public class GameObjectMVCFactory : IGameObjectMVCFactory
 	{

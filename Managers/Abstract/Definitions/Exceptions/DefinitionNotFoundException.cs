@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Managers.Definitions
+namespace Framework.Managers.Definitions
 {
 	public class DefinitionNotFoundException : Exception
 	{

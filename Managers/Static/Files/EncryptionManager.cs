@@ -1,4 +1,4 @@
-namespace Core.Managers.Files
+namespace Framework.Managers.Files
 {
 	public static class EncryptionManager
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace Core.Managers.ScriptableObjects
+namespace Framework.Managers.ScriptableObjects
 {
 	public class ScriptableObjectsPathHandler : ScriptableObject
 	{

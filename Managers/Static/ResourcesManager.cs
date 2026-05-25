@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Core.Managers
+namespace Framework.Managers
 {
 	public static class ResourcesManager
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.Managers.Files
+namespace Framework.Managers.Files
 {
 	public class PathNotFoundException : Exception
 	{

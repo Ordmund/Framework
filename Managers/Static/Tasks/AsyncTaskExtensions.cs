@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
-using Core.Tasks;
+using Framework.Tasks;
 using UnityEngine;
 
-namespace Core.Managers
+namespace Framework.Managers
 {
 	public static class AsyncTaskExtensions
 	{

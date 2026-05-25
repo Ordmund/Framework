@@ -1,9 +1,9 @@
-using Core.Binders;
-using Core.Managers.Injectable;
-using Core.MVC;
+using Framework.Binders;
+using Framework.Managers.Injectable;
+using Framework.MVC;
 using Zenject;
 
-namespace Core.Installers
+namespace Framework.Installers
 {
 	public class CoreInstaller : MonoInstaller
 	{
