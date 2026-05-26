@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Framework.Installers
 {
-	public class CoreInstaller : MonoInstaller
+	public class FrameworkInstaller : MonoInstaller
 	{
 		public override void InstallBindings()
 		{
