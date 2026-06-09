@@ -12,9 +12,10 @@ namespace Framework.Managers.Behaviours
 
 		private readonly Dictionary<string, Type> _behaviours = new();
 
-		protected BehaviourFactory(DiContainer container)
+		protected BehaviourFactory(DiContainer container, TickableManager tickableManager)
 		{
 			_container = container;
+			_tickableManager = tickableManager;
 		}
 
 		public virtual void Initialize()
