@@ -40,13 +40,10 @@ namespace Framework.UI
 			ApplySelection();
 		}
 
-		private static void Validate(string[] options, int startIndex)
+		public void SetInteractability(bool isInteractable)
 		{
-			if (options == null || options.Length == 0)
-				throw new ArgumentException("Options array is empty");
-
-			if (startIndex < 0 || startIndex >= options.Length)
-				throw new ArgumentOutOfRangeException(nameof(startIndex));
+			_leftButton.interactable = isInteractable;
+			_rightButton.interactable = isInteractable;
 		}
 
 		private void MoveLeft() => Move(-1);
@@ -95,6 +92,15 @@ namespace Framework.UI
 
 			_leftButton.interactable = _selectedIndex > 0;
 			_rightButton.interactable = _selectedIndex < _options.Length - 1;
+		}
+		
+		private static void Validate(string[] options, int startIndex)
+		{
+			if (options == null || options.Length == 0)
+				throw new ArgumentException("Options array is empty");
+
+			if (startIndex < 0 || startIndex >= options.Length)
+				throw new ArgumentOutOfRangeException(nameof(startIndex));
 		}
 
 		private void OnEnable()
