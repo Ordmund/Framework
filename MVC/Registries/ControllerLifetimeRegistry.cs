@@ -1,20 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Framework.Managers.Injectable;
 using Zenject;
 
 namespace Framework.MVC
 {
 	public class ControllerLifetimeRegistry : IControllerLifetimeRegistry, IDisposable, ILateDisposable
 	{
-		private readonly IObjectReleaser _objectReleaser;
-
 		private readonly List<IController> _controllers = new();
-
-		public ControllerLifetimeRegistry(IObjectReleaser objectReleaser)
-		{
-			_objectReleaser = objectReleaser;
-		}
 
 		public void Register(IController controller)
 		{
@@ -29,25 +21,46 @@ namespace Framework.MVC
 			if (!_controllers.Remove(controller))
 				throw new InvalidOperationException($"Controller {controller} not registered.");
 
-			_objectReleaser.Release(controller);
+			CallDispose(controller);
+			CallLateDispose(controller);
 		}
 
 		public void ReleaseAll()
 		{
 			foreach (var controller in _controllers)
 			{
-				_objectReleaser.Release(controller);
+				CallDispose(controller);
+			}
+
+			foreach (var controller in _controllers)
+			{
+				CallLateDispose(controller);
 			}
 
 			_controllers.Clear();
+		}
+
+		private static void CallDispose(IController controller)
+		{
+			if (controller is IDisposable disposable)
+			{
+				disposable.Dispose();
+			}
+		}
+
+		private static void CallLateDispose(IController controller)
+		{
+			if (controller is ILateDisposable disposable)
+			{
+				disposable.LateDispose();
+			}
 		}
 
 		public void Dispose()
 		{
 			foreach (var controller in _controllers)
 			{
-				_objectReleaser.UnsubscribeFromTickable(controller);
-				_objectReleaser.Dispose(controller);
+				CallDispose(controller);
 			}
 		}
 
@@ -55,7 +68,7 @@ namespace Framework.MVC
 		{
 			foreach (var controller in _controllers)
 			{
-				_objectReleaser.LateDispose(controller);
+				CallLateDispose(controller);
 			}
 
 			_controllers.Clear();

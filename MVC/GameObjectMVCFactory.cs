@@ -13,13 +13,11 @@ namespace Framework.MVC
 	public class GameObjectMVCFactory : IGameObjectMVCFactory
 	{
 		private readonly DiContainer _container;
-		private readonly TickableManager _tickableManager;
 		private readonly IPrefabsPathProvider _prefabsPathProvider;
 
-		public GameObjectMVCFactory(DiContainer container, TickableManager tickableManager, IPrefabsPathProvider prefabsPathProvider)
+		public GameObjectMVCFactory(DiContainer container, IPrefabsPathProvider prefabsPathProvider)
 		{
 			_container = container;
-			_tickableManager = tickableManager;
 			_prefabsPathProvider = prefabsPathProvider;
 		}
 
@@ -94,7 +92,9 @@ namespace Framework.MVC
 		}
 
 		public TController BindToView<TController, TView, TModel>(TView view, object[] extraArgs = null)
-			where TController : ControllerBase<TView, TModel> where TView : ViewBase where TModel : ModelBase
+			where TController : ControllerBase<TView, TModel> 
+			where TView : ViewBase 
+			where TModel : ModelBase
 		{
 			var model = CreateModel<TModel>();
 			var controller = CreateAndInitialize<TController, TView, TModel>(view, model, extraArgs);
@@ -109,7 +109,6 @@ namespace Framework.MVC
 
 			var controller = _container.Instantiate<TController>(args);
 
-			TryRegisterTickable(controller);
 			TryCallInitialize(controller);
 
 			return controller;
@@ -120,24 +119,6 @@ namespace Framework.MVC
 			if (controller is IInitializable initializable)
 			{
 				initializable.Initialize();
-			}
-		}
-
-		private void TryRegisterTickable<TController>(TController controller)
-		{
-			if (controller is ITickable tickable)
-			{
-				_tickableManager.Add(tickable);
-			}
-
-			if (controller is IFixedTickable fixedTickable)
-			{
-				_tickableManager.AddFixed(fixedTickable);
-			}
-
-			if (controller is ILateTickable lateTickable)
-			{
-				_tickableManager.AddLate(lateTickable);
 			}
 		}
 

@@ -1,5 +1,4 @@
 using Framework.Binders;
-using Framework.Managers.Injectable;
 using Framework.MVC;
 using Zenject;
 
@@ -9,14 +8,8 @@ namespace Framework.Installers
 	{
 		public override void InstallBindings()
 		{
-			BindObjectReleaser();
 			BindMemoryPoolBinder();
 			BindGameObjectMVCFactory();
-		}
-
-		private void BindObjectReleaser()
-		{
-			Container.Bind<IObjectReleaser>().To<ObjectReleaser>().AsSingle();
 		}
 
 		private void BindMemoryPoolBinder()
