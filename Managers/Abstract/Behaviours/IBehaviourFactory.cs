@@ -11,12 +11,6 @@ namespace Framework.Managers.Behaviours
 		TBehaviour Create(string id, object[] extraArguments = null);
 
 		/// <summary>
-		/// Releases the specified behaviour from the container, removing it from all managed lifecycle processing.
-		/// </summary>
-		/// <param name="behaviour">The behaviour instance to be released from container-managed execution.</param>
-		void Release(TBehaviour behaviour);
-
-		/// <summary>
 		/// Registers a new behaviour using the type name of <typeparamref name="TConcrete"/> as its identifier.
 		/// </summary>
 		/// <typeparam name="TConcrete">A non-abstract behaviour type.</typeparam>

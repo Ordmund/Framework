@@ -8,14 +8,12 @@ namespace Framework.Managers.Behaviours
 	public abstract class BehaviourFactory<TBehaviour, TFallbackBehaviour> : IBehaviourFactory<TBehaviour>, IInitializable where TBehaviour : Behaviour where TFallbackBehaviour : TBehaviour
 	{
 		private readonly DiContainer _container;
-		private readonly TickableManager _tickableManager;
 
 		private readonly Dictionary<string, Type> _behaviours = new();
 
-		protected BehaviourFactory(DiContainer container, TickableManager tickableManager)
+		protected BehaviourFactory(DiContainer container)
 		{
 			_container = container;
-			_tickableManager = tickableManager;
 		}
 
 		public virtual void Initialize()
@@ -37,18 +35,11 @@ namespace Framework.Managers.Behaviours
 			{
 				var behaviour = (TBehaviour)_container.Instantiate(type, extraArguments);
 
-				TryRegisterTickable(behaviour);
-
 				return behaviour;
 			}
 
 			Debug.LogError($"The behaviour for {formattedId} not found");
 			return _container.Instantiate<TFallbackBehaviour>();
-		}
-
-		public void Release(TBehaviour behaviour)
-		{
-			TryUnregisterTickable(behaviour);
 		}
 
 		public void Register<TConcrete>() where TConcrete : TBehaviour
@@ -69,42 +60,6 @@ namespace Framework.Managers.Behaviours
 			if (!_behaviours.TryAdd(id, type))
 			{
 				Debug.LogError($"Behaviour Id {id} is already registered with {_behaviours[id].Name}");
-			}
-		}
-
-		private void TryRegisterTickable(TBehaviour behaviour)
-		{
-			if (behaviour is ITickable tickable)
-			{
-				_tickableManager.Add(tickable);
-			}
-
-			if (behaviour is IFixedTickable fixedTickable)
-			{
-				_tickableManager.AddFixed(fixedTickable);
-			}
-
-			if (behaviour is ILateTickable lateTickable)
-			{
-				_tickableManager.AddLate(lateTickable);
-			}
-		}
-
-		private void TryUnregisterTickable(TBehaviour behaviour)
-		{
-			if (behaviour is ITickable tickable)
-			{
-				_tickableManager.Remove(tickable);
-			}
-
-			if (behaviour is IFixedTickable fixedTickable)
-			{
-				_tickableManager.RemoveFixed(fixedTickable);
-			}
-
-			if (behaviour is ILateTickable lateTickable)
-			{
-				_tickableManager.RemoveLate(lateTickable);
 			}
 		}
 
