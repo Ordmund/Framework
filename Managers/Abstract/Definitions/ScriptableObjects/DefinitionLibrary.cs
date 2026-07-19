@@ -13,7 +13,7 @@ namespace Framework.Managers.Definitions
 
 		protected abstract string PathToDefinitions { get; }
 
-		public List<T> Definitions => definitions;
+		public IReadOnlyList<T> Definitions => definitions;
 
 		public virtual void ScanForDefinitions()
 		{
