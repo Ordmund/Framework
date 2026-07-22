@@ -16,10 +16,10 @@ namespace Framework.Editor
 		private string _scriptableObjectName;
 		private int _selectedIndex;
 
-		protected virtual Assembly TargetAssembly => typeof(ScriptableObjectsPathHandler).Assembly;
+		protected virtual Assembly[] TargetAssemblies => new[] { typeof(ScriptableObjectsPathHandler).Assembly };
 		protected virtual Type[] IgnoredTypes => new[] { typeof(Definition) };
 
-		[MenuItem("Window/ScriptableObjects/Core Assembly Creator")]
+		[MenuItem("Tools/ScriptableObjects/Framework Assembly Creator")]
 		private static void OpenWindow()
 		{
 			var window = GetWindow<ScriptableObjectsCreator>();
@@ -29,7 +29,7 @@ namespace Framework.Editor
 
 		protected void Initialize()
 		{
-			_scriptableObjects = TargetAssembly.GetTypes().Where(IsDisplayableScriptableObjectType).ToArray();
+			_scriptableObjects = TargetAssemblies.SelectMany(assembly => assembly.GetTypes()).Where(IsDisplayableScriptableObjectType).ToArray();
 		}
 
 		private bool IsDisplayableScriptableObjectType(Type classType)
