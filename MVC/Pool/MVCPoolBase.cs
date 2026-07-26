@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Framework.Binders;
 using Framework.MVC.Pool;
@@ -6,7 +7,7 @@ using Zenject;
 
 namespace Framework.MVC
 {
-	public class MVCPoolBase<TController, TView, TModel> : IMVCPoolBase<TController, TView, TModel> 
+	public class MVCPoolBase<TController, TView, TModel> : IMVCPoolBase<TController, TView, TModel>, IDisposable
 		where TController : ControllerBase<TView, TModel>, IPoolable
 		where TView : ViewBase, IPoolable
 		where TModel : ModelBase
@@ -73,6 +74,11 @@ namespace Framework.MVC
 		private static void WriteNotBoundLogError()
 		{
 			Debug.LogError($"{nameof(MonoMemoryPool)} is not bound!");
+		}
+
+		public void Dispose()
+		{
+			_memoryPool?.Dispose();
 		}
 
 		private class MonoMemoryPool : MonoMemoryPool<TView>
