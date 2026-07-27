@@ -9,7 +9,7 @@ namespace Framework.Managers
 		private static readonly Dictionary<string, Object> Assets = new();
 
 		/// <summary>
-		/// Loads asset with specified type by specified path
+		/// Loads an asset of the specified type from the specified path
 		/// </summary>
 		/// <param name="path">Path to asset</param>
 		/// <typeparam name="T">Type of asset that inherited from Unity.Object</typeparam>
@@ -28,26 +28,27 @@ namespace Framework.Managers
 		/// <summary>
 		/// Unload specified asset
 		/// </summary>
-		/// <param name="asset">Asset that need to be unloaded</param>
+		/// <param name="asset">Asset that needs to be unloaded</param>
 		public static void Unload(Object asset)
 		{
 			var assetPair = Assets.FirstOrDefault(pair => pair.Value == asset);
 			if (!string.IsNullOrEmpty(assetPair.Key))
 				Assets.Remove(assetPair.Key);
 
-			Resources.UnloadAsset(asset);
+			if (IsUnloadable(asset))
+				Resources.UnloadAsset(asset);
 		}
 
 		/// <summary>
-		/// Unload asset by specified path
+		/// Unload an asset by a specified path
 		/// </summary>
-		/// <param name="path">Path to asset that need to be unloaded</param>
+		/// <param name="path">Path to the asset that needs to be unloaded</param>
 		public static void Unload(string path)
 		{
 			if (Assets.ContainsKey(path))
 			{
 				var asset = Assets[path];
-				if (asset is not GameObject)
+				if (IsUnloadable(asset))
 					Resources.UnloadAsset(asset);
 
 				Assets.Remove(path);
@@ -66,6 +67,15 @@ namespace Framework.Managers
 			Assets.Clear();
 
 			Resources.UnloadUnusedAssets();
+		}
+
+		private static bool IsUnloadable(Object asset)
+		{
+			return asset switch
+			{
+				Texture or Mesh or Material or Shader or Sprite or Font or AudioClip or AnimationClip or ScriptableObject => true,
+				_ => false
+			};
 		}
 	}
 }
