@@ -60,7 +60,7 @@ namespace Framework.Managers
 		/// </summary>
 		public static void UnloadAll()
 		{
-			var assetsToUnload = Assets.Where(asset => asset.Value is not GameObject);
+			var assetsToUnload = Assets.Where(asset => IsUnloadable(asset.Value));
 			foreach (var asset in assetsToUnload)
 				Resources.UnloadAsset(asset.Value);
 
