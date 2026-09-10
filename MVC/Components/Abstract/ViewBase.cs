@@ -7,6 +7,9 @@ namespace Framework.MVC
 		private GameObject _gameObject;
 		private Transform _transform;
 
+		public Vector3 Position => Transform.position;
+		public Vector3 LocalPosition => Transform.position;
+
 		protected GameObject GameObject => _gameObject ??= gameObject;
 		protected Transform Transform => _transform ??= transform;
 
