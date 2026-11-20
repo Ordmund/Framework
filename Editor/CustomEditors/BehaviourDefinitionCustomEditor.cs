@@ -3,6 +3,7 @@ using System.Linq;
 using Framework.Managers.Behaviours;
 using Framework.Managers.Definitions;
 using UnityEditor;
+using UnityEngine.Assemblies;
 
 namespace Framework.Editor.CustomEditors
 {
@@ -27,8 +28,7 @@ namespace Framework.Editor.CustomEditors
 		{
 			var behaviourType = typeof(TBehaviour);
 
-			_behavioursIdsNames = AppDomain.CurrentDomain
-				.GetAssemblies().SelectMany(assembly => assembly.GetTypes())
+			_behavioursIdsNames = CurrentAssemblies.GetLoadedAssemblies().SelectMany(assembly => assembly.GetTypes())
 				.Where(type => behaviourType.IsAssignableFrom(type) && !type.IsAbstract)
 				.Select(type => type.Name).ToArray();
 		}

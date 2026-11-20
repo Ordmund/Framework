@@ -87,7 +87,7 @@ namespace Framework.Editor.UI
 
 		private static Transform ResolveParent(GameObject selected)
 		{
-			var canvas = selected != null ? selected.GetComponentInParent<Canvas>() : Object.FindFirstObjectByType<Canvas>();
+			var canvas = selected != null ? selected.GetComponentInParent<Canvas>() : Object.FindAnyObjectByType<Canvas>();
 			if (canvas == null)
 			{
 				var canvasGameObject = new GameObject(nameof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -97,7 +97,7 @@ namespace Framework.Editor.UI
 				Undo.RegisterCreatedObjectUndo(canvasGameObject, string.Format(UnregisterStepNameFormat, nameof(Canvas)));
 			}
 
-			if (Object.FindFirstObjectByType<EventSystem>() == null)
+			if (Object.FindAnyObjectByType<EventSystem>() == null)
 			{
 				var eventSystemGameObject = new GameObject(nameof(EventSystem), typeof(EventSystem), typeof(StandaloneInputModule));
 
